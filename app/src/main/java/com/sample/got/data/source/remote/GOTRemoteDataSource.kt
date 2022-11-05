@@ -12,13 +12,13 @@ class GOTRemoteDataSource(
     private val GOTApi: GOTApi
 ) : GOTDataSource {
 
-    override fun getHousesStream(): Flow<Result<List<House>>> = flow {
-        emit(getHouses())
+    override fun getHousesStream(page:Int, pageSize:Int): Flow<Result<List<House>>> = flow {
+        emit(getHouses(page, pageSize))
     }
 
-    override suspend fun getHouses(): Result<List<House>> {
+    override suspend fun getHouses(page:Int, pageSize:Int): Result<List<House>> {
         val response = try {
-            GOTApi.getHouses()
+            GOTApi.getHouses(page,pageSize)
         } catch (e: Exception) {
             return Result.Error(e)
         }

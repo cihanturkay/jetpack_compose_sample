@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
  */
 interface GOTDataSource {
 
-    fun getHousesStream(): Flow<Result<List<House>>>
+    fun getHousesStream(page:Int, pageSize:Int): Flow<Result<List<House>>>
 
-    suspend fun getHouses(): Result<List<House>>
+    suspend fun getHouses(page:Int, pageSize:Int): Result<List<House>>
 
     suspend fun getHouse(id: Int): Result<House>
 }

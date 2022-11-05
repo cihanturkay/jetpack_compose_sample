@@ -12,7 +12,7 @@ private object GOTScreens {
 }
 
 object GOTDestinationsArgs {
-    const val HOUSE_ID_ARG = "taskId"
+    const val HOUSE_ID_ARG = "houseId"
 }
 
 object GOTDestinations {
@@ -35,7 +35,7 @@ class GOTNavigationActions(private val navController: NavHostController) {
         }
     }
 
-    fun navigateToHouseDetail(id: Int) {
+    fun navigateToHouseDetail(id: String) {
         navController.navigate("$GOT_HOUSE_DETAIL_SCREEN/$id")
     }
 }

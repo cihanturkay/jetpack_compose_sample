@@ -25,13 +25,13 @@ fun GOTNavGraph(
     ) {
         composable(GOTDestinations.HOUSES_ROUTE) {
             HousesScreen(
-                onHouseClick = { id -> navActions.navigateToHouseDetail(id) }
+                onHouseClick = { house -> navActions.navigateToHouseDetail(house.url) }
             )
         }
         composable(
             GOTDestinations.HOUSE_DETAIL_ROUTE,
             arguments = listOf(navArgument(GOTDestinationsArgs.HOUSE_ID_ARG) {
-                type = NavType.IntType
+                type = NavType.StringType
             })
         ) {
             HouseDetailScreen(
