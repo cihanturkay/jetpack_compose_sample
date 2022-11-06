@@ -18,3 +18,5 @@ data class House(
     val cadetBranches: ArrayList<String> = arrayListOf(),
     val swornMembers: ArrayList<String> = arrayListOf()
 )
+
+fun House.getId(): Int = url.substringAfterLast("/").toInt()

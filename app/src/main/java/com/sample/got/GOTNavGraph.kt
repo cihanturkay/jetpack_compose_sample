@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.sample.got.data.model.getId
 import com.sample.got.housedetail.HouseDetailScreen
 import com.sample.got.houses.HousesScreen
 
@@ -25,19 +26,18 @@ fun GOTNavGraph(
     ) {
         composable(GOTDestinations.HOUSES_ROUTE) {
             HousesScreen(
-                onHouseClick = { house -> navActions.navigateToHouseDetail(house.url) }
+                onHouseClick = { house -> navActions.navigateToHouseDetail(house.getId()) }
             )
         }
         composable(
             GOTDestinations.HOUSE_DETAIL_ROUTE,
             arguments = listOf(navArgument(GOTDestinationsArgs.HOUSE_ID_ARG) {
-                type = NavType.StringType
+                type = NavType.IntType
             })
         ) {
             HouseDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
-
     }
 }

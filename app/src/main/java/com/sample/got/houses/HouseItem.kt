@@ -27,10 +27,11 @@ import com.sample.got.ui.theme.GOTTheme
 @Composable
 fun HouseItem(house: House, onHouseClicked: (House) -> Unit) {
     Card(
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.large,
         backgroundColor = MaterialTheme.colors.surface,
         contentColor = contentColorFor(backgroundColor),
-        elevation = 2.dp,
+        elevation = 4.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colors.onSurface),
         onClick = { onHouseClicked(house) },
     ) {
         Column(
@@ -50,7 +51,7 @@ fun HouseItem(house: House, onHouseClicked: (House) -> Unit) {
                 mainAxisSpacing = dimensionResource(id = R.dimen.horizontal_margin),
                 crossAxisSpacing = dimensionResource(id = R.dimen.horizontal_margin) / 2,
             ) {
-                HouseItemChip(Icons.Filled.List, house.words)
+                HouseItemChip(null, house.words)
                 HouseItemChip(Icons.Filled.LocationOn, house.region)
                 HouseItemChip(Icons.Filled.AccountCircle, house.swornMembers.size.toString())
             }
@@ -60,7 +61,7 @@ fun HouseItem(house: House, onHouseClicked: (House) -> Unit) {
 }
 
 @Composable
-fun HouseItemChip(icon: ImageVector, text: String) {
+fun HouseItemChip(icon: ImageVector?, text: String) {
     if (text.isNotEmpty()) {
         Box(
             modifier = Modifier
@@ -71,7 +72,9 @@ fun HouseItemChip(icon: ImageVector, text: String) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(icon, contentDescription = null, Modifier.size(20.dp))
+                icon?.let {
+                    Icon(it, contentDescription = null, Modifier.size(20.dp))
+                }
                 Text(
                     text = text,
                     style = MaterialTheme.typography.body1,

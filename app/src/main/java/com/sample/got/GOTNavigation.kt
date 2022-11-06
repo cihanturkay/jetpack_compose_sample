@@ -35,7 +35,7 @@ class GOTNavigationActions(private val navController: NavHostController) {
         }
     }
 
-    fun navigateToHouseDetail(id: String) {
+    fun navigateToHouseDetail(id: Int) {
         navController.navigate("$GOT_HOUSE_DETAIL_SCREEN/$id")
     }
 }
