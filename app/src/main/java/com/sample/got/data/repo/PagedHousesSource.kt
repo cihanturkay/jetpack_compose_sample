@@ -6,13 +6,13 @@ import com.sample.got.data.model.House
 import com.sample.got.data.model.Result
 
 class PagedHousesSource(
-    private val GOTRepository: GOTRepository
+    private val repository: Repository
 ) : PagingSource<Int, House>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, House> {
         return try {
             val nextPage = params.key ?: 1
-            when (val houses = GOTRepository.getHouses(nextPage)) {
+            when (val houses = repository.getHouses(nextPage)) {
                 is Result.Success -> {
                     LoadResult.Page(
                         data = houses.data,

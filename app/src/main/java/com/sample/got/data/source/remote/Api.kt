@@ -8,7 +8,7 @@ import retrofit2.http.Query
 import javax.inject.Singleton
 
 @Singleton
-interface GOTApi {
+interface Api {
 
     @GET("houses")
     suspend fun getHouses(@Query("page") page: Int, @Query("pageSize") pageSize: Int): List<House>

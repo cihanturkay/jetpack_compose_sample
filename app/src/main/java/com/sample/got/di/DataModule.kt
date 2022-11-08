@@ -1,10 +1,10 @@
 package com.sample.got.di
 
-import com.sample.got.data.repo.DefaultGOTRepository
-import com.sample.got.data.repo.GOTRepository
-import com.sample.got.data.source.GOTDataSource
-import com.sample.got.data.source.remote.GOTApi
-import com.sample.got.data.source.remote.GOTRemoteDataSource
+import com.sample.got.data.repo.DefaultRepository
+import com.sample.got.data.repo.Repository
+import com.sample.got.data.source.DataSource
+import com.sample.got.data.source.remote.Api
+import com.sample.got.data.source.remote.RemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +19,11 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RemoteGOTDataSource
+annotation class RemoteDataSourceType
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class LocalGOTDataSource
+annotation class LocalDataSourceType
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,9 +32,9 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideGOTRepository(
-        @RemoteGOTDataSource remoteDataSource: GOTDataSource,
-    ): GOTRepository {
-        return DefaultGOTRepository(remoteDataSource)
+        @RemoteDataSourceType remoteDataSource: DataSource,
+    ): Repository {
+        return DefaultRepository(remoteDataSource)
     }
 }
 
@@ -43,19 +43,19 @@ object RepositoryModule {
 object DataSourceModule {
 
     @Singleton
-    @RemoteGOTDataSource
+    @RemoteDataSourceType
     @Provides
-    fun provideGOTRemoteDataSource(api: GOTApi): GOTDataSource = GOTRemoteDataSource(api)
+    fun provideGOTRemoteDataSource(api: Api): DataSource = RemoteDataSource(api)
 
     @Singleton
     @Provides
-    fun provideGOTService(client: OkHttpClient): GOTApi {
+    fun provideService(client: OkHttpClient): Api {
         return Retrofit.Builder()
             .baseUrl("https://www.anapioficeandfire.com/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-            .create(GOTApi::class.java)
+            .create(Api::class.java)
     }
 
     @Singleton

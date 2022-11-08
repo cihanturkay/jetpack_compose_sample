@@ -3,15 +3,13 @@ package com.sample.got.data.source.remote
 import com.sample.got.data.model.Character
 import com.sample.got.data.model.House
 import com.sample.got.data.model.Result
-import com.sample.got.data.source.GOTDataSource
-import kotlinx.coroutines.Dispatchers
+import com.sample.got.data.source.DataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
-class GOTRemoteDataSource(
-    private val GOTApi: GOTApi
-) : GOTDataSource {
+class RemoteDataSource(
+    private val api: Api
+) : DataSource {
 
     override fun getHousesStream(page:Int, pageSize:Int): Flow<Result<List<House>>> = flow {
         emit(getHouses(page, pageSize))
@@ -19,7 +17,7 @@ class GOTRemoteDataSource(
 
     override suspend fun getHouses(page:Int, pageSize:Int): Result<List<House>> {
         val response = try {
-            GOTApi.getHouses(page,pageSize)
+            api.getHouses(page,pageSize)
         } catch (e: Exception) {
             return Result.Error(e)
         }
@@ -29,7 +27,7 @@ class GOTRemoteDataSource(
 
     override suspend fun getHouse(id: Int): Result<House> {
         val response = try {
-            GOTApi.getHouse(id)
+            api.getHouse(id)
         } catch (e: Exception) {
             return Result.Error(e)
         }
@@ -39,7 +37,7 @@ class GOTRemoteDataSource(
 
     override suspend fun getCharacter(id: Int): Result<Character> {
         val response = try {
-            GOTApi.getCharacter(id)
+            api.getCharacter(id)
         } catch (e: Exception) {
             return Result.Error(e)
         }

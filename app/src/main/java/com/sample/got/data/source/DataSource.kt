@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Main entry point for accessing data (remote & local).
  */
-interface GOTDataSource {
+interface DataSource {
 
     fun getHousesStream(page: Int, pageSize: Int): Flow<Result<List<House>>>
 

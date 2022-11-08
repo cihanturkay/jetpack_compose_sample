@@ -13,25 +13,25 @@ import com.sample.got.housedetail.HouseDetailScreen
 import com.sample.got.houses.HousesScreen
 
 @Composable
-fun GOTNavGraph(
+fun MainNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = GOTDestinations.HOUSES_ROUTE,
-    navActions: GOTNavigationActions = remember(navController) {
-        GOTNavigationActions(navController)
+    startDestination: String = Destinations.HOUSES_ROUTE,
+    navActions: NavigationActions = remember(navController) {
+        NavigationActions(navController)
     }
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
-        composable(GOTDestinations.HOUSES_ROUTE) {
+        composable(Destinations.HOUSES_ROUTE) {
             HousesScreen(
                 onHouseClick = { house -> navActions.navigateToHouseDetail(house.getId()) }
             )
         }
         composable(
-            GOTDestinations.HOUSE_DETAIL_ROUTE,
-            arguments = listOf(navArgument(GOTDestinationsArgs.HOUSE_ID_ARG) {
+            Destinations.HOUSE_DETAIL_ROUTE,
+            arguments = listOf(navArgument(DestinationsArgs.HOUSE_ID_ARG) {
                 type = NavType.IntType
             })
         ) {

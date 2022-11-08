@@ -3,11 +3,11 @@ package com.sample.got.housedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sample.got.GOTDestinationsArgs
+import com.sample.got.DestinationsArgs
 import com.sample.got.data.model.Character
 import com.sample.got.data.model.House
 import com.sample.got.data.model.Result
-import com.sample.got.data.repo.GOTRepository
+import com.sample.got.data.repo.Repository
 import com.sample.got.util.WhileUiSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +28,11 @@ data class HouseDetailUIState(
 
 @HiltViewModel
 class HouseDetailViewModel @Inject constructor(
-    private val GOTRepository: GOTRepository,
+    private val Repository: Repository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val houseId: Int = savedStateHandle[GOTDestinationsArgs.HOUSE_ID_ARG]!!
+    private val houseId: Int = savedStateHandle[DestinationsArgs.HOUSE_ID_ARG]!!
     private val _isLoading = MutableStateFlow(false)
     private val _isError = MutableStateFlow(false)
     private val _characters = MutableStateFlow(emptyList<Character>())
@@ -55,10 +55,12 @@ class HouseDetailViewModel @Inject constructor(
     private suspend fun fillData() = withContext(Dispatchers.IO) {
         _isLoading.value = true
         _isError.value = false
-        val houseResult = GOTRepository.getHouse(houseId)
+        _house.value = null
+        _characters.value = emptyList()
+        val houseResult = Repository.getHouse(houseId)
         if (houseResult is Result.Success) {
             _house.value = houseResult.data
-            val charactersResult = GOTRepository.getCharacters(houseResult.data.swornMembers.map {
+            val charactersResult = Repository.getCharacters(houseResult.data.swornMembers.map {
                 it.substringAfterLast("/").toInt()
             })
 
