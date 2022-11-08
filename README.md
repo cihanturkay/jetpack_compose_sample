@@ -1,5 +1,6 @@
 # jetpack_compose_sample
 This sample app demonstrates the new architecture standards in android by using hilt and jetpack compose [Learning Purpose]
+Architecture is based on https://github.com/android/architecture-samples
 
 App uses https://anapioficeandfire.com/ api to fetch game of thrones data.
 It has 2 basic screens, one displays the complete house list in the api by using android Paging lib and 
