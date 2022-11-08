@@ -1,5 +1,6 @@
 package com.sample.got.data.source.remote
 
+import com.sample.got.data.model.Character
 import com.sample.got.data.model.House
 import com.sample.got.data.model.Result
 import com.sample.got.data.source.GOTDataSource
@@ -29,6 +30,16 @@ class GOTRemoteDataSource(
     override suspend fun getHouse(id: Int): Result<House> {
         val response = try {
             GOTApi.getHouse(id)
+        } catch (e: Exception) {
+            return Result.Error(e)
+        }
+
+        return Result.Success(response)
+    }
+
+    override suspend fun getCharacter(id: Int): Result<Character> {
+        val response = try {
+            GOTApi.getCharacter(id)
         } catch (e: Exception) {
             return Result.Error(e)
         }

@@ -1,27 +1,23 @@
 package com.sample.got.houses
 
-import android.widget.ProgressBar
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.sample.got.data.model.House
 import com.sample.got.data.model.getId
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import com.sample.got.util.ProgressBar
+import com.sample.got.util.Retry
 
 @Composable
 fun HousesScreen(
@@ -36,29 +32,26 @@ fun HousesScreen(
     ) { paddingValues ->
 
         HouseList(
-            houses = viewModel.houses,
-            onHouseClick,
-            snackbarHostState = scaffoldState.snackbarHostState
+            onHouseClick = onHouseClick,
+            viewModel = viewModel,
         )
-
     }
 }
 
 @Composable
 fun HouseList(
-    houses: Flow<PagingData<House>>,
     onHouseClick: (House) -> Unit,
-    snackbarHostState: SnackbarHostState,
-    scope: CoroutineScope = rememberCoroutineScope()
+    viewModel: HousesViewModel
 ) {
-    val lazyHouseItems = houses.collectAsLazyPagingItems()
+    val lazyHouseItems = viewModel.houses.collectAsLazyPagingItems()
     lazyHouseItems.apply {
         when (loadState.refresh) {
             is LoadState.Loading -> ProgressBar()
             is LoadState.Error -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Something went wrong while loading houses")
-                }
+                Retry(
+                    onRetry = { lazyHouseItems.refresh() },
+                    message = "Something went wrong while loading houses"
+                )
             }
             is LoadState.NotLoading -> {
                 LazyColumn(
@@ -78,15 +71,5 @@ fun HouseList(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ProgressBar() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
     }
 }

@@ -18,7 +18,7 @@ class HousesViewModel @Inject constructor(
     private val GOTRepository: GOTRepository,
 ) : ViewModel() {
     val houses: Flow<PagingData<House>> =
-        Pager(PagingConfig(pageSize = 40, prefetchDistance = 80)) {
+        Pager(PagingConfig(pageSize = 40)) {
             PagedHousesSource(GOTRepository)
         }.flow.cachedIn(viewModelScope)
 }
