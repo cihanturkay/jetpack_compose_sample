@@ -1,5 +1,6 @@
 package com.sample.got.di
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sample.got.data.repo.DefaultRepository
 import com.sample.got.data.repo.Repository
 import com.sample.got.data.source.DataSource
@@ -9,10 +10,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -50,9 +52,12 @@ object DataSourceModule {
     @Singleton
     @Provides
     fun provideService(client: OkHttpClient): Api {
+        val contentType = "application/json".toMediaType()
+        val kotlinxConverterFactory = Json.asConverterFactory(contentType)
+
         return Retrofit.Builder()
             .baseUrl("https://www.anapioficeandfire.com/api/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(kotlinxConverterFactory)
             .client(client)
             .build()
             .create(Api::class.java)
@@ -61,7 +66,6 @@ object DataSourceModule {
     @Singleton
     @Provides
     fun provideHttpClient(): OkHttpClient {
-        var okHttpClient: OkHttpClient? = null
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 

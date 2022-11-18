@@ -1,5 +1,9 @@
 package com.sample.got.data.model
 
+import kotlinx.serialization.Serializable
+
+
+@Serializable
 data class House(
     val url: String,
     val name: String,
